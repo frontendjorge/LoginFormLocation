@@ -1,5 +1,5 @@
-# React Redux Login Flow
-A simple application to demonstrate a login flow with React & Redux.
+# React Redux Login Flow for Liftit test frontend
+A simple application to demonstrate a login flow with React & Redux, redux form and google map based in latitude and position from map.
 
 
 # Usage
