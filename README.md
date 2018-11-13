@@ -1,14 +1,17 @@
-# React Redux Login Flow
-A simple application to demonstrate a login flow with React & Redux.
-Read full tutorial at here: [A simple login flow with React and Redux](http://jslancer.com/2017/04/27/a-simple-login-flow-with-react-and-redux)
+# LoginPage with new service in google maps origin and destination React, Javascript
 
-![ezgif com-video-to-gif](https://cloud.githubusercontent.com/assets/1154740/25493010/fed3b2cc-2b9e-11e7-8736-9250549128ec.gif)
+# HOW TO USE ---------
 
+	- Download or clone the repositoty
+	- npm install
+	- npm start
+	- auto open http://localhost:3000 user for test is jorgsuau@live.com.co and password for test is 123456
+	- npm run build
 
-# Usage
-```
-git clone https://github.com/davidtran/react-redux-login-flow
-npm intall
-npm start
-```
+# PRE-REQUISITES --------
+	- node.js
+	- npm
+	- React ^15.5.4
+
+# By Jorge Suarez for Liftit frontend test
 

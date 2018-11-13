@@ -1,9 +1,114 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
+    <script>
+       
+
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                mapTypeControl: false,
+                center: { lat: 4.6767528, lng: -74.0482935 },
+                zoom: 16
+            });
+
+            new AutocompleteDirectionsHandler(map);
+        }
+
+        /**
+         * @constructor
+        */
+        function AutocompleteDirectionsHandler(map) {
+            this.map = map;
+            this.originPlaceId = null;
+            this.destinationPlaceId = null;
+            this.travelMode = 'WALKING';
+            var descInput = document.getElementById('description-input');
+            var originInput = document.getElementById('origin-input');
+            var destinationInput = document.getElementById('destination-input');
+            var modeSelector = document.getElementById('mode-selector');
+            this.directionsService = new google.maps.DirectionsService;
+            this.directionsDisplay = new google.maps.DirectionsRenderer;
+            this.directionsDisplay.setMap(map);
+
+            var originAutocomplete = new google.maps.places.Autocomplete(
+                originInput, { placeIdOnly: true });
+            var destinationAutocomplete = new google.maps.places.Autocomplete(
+                destinationInput, { placeIdOnly: true });
+
+            this.setupClickListener('changemode-walking', 'WALKING');
+            this.setupClickListener('changemode-transit', 'TRANSIT');
+            this.setupClickListener('changemode-driving', 'DRIVING');
+
+            this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+            this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+            //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(descInput);
+            //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+            //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+            this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+        }
+
+        // Sets a listener on a radio button to change the filter type on Places
+        // Autocomplete.
+        AutocompleteDirectionsHandler.prototype.setupClickListener = function (id, mode) {
+            var radioButton = document.getElementById(id);
+            var me = this;
+            radioButton.addEventListener('click', function () {
+                me.travelMode = mode;
+                me.route();
+            });
+        };
+
+        AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (autocomplete, mode) {
+            var me = this;
+            autocomplete.bindTo('bounds', this.map);
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                if (!place.place_id) {
+                    window.alert("Please select an option from the dropdown list.");
+                    return;
+                }
+                if (mode === 'ORIG') {
+                    me.originPlaceId = place.place_id;
+                } else {
+                    me.destinationPlaceId = place.place_id;
+                }
+                me.route();
+                
+
+            });
+
+        };
+
+        AutocompleteDirectionsHandler.prototype.route = function () {
+            if (!this.originPlaceId || !this.destinationPlaceId) {
+                return;
+            }
+            var me = this;
+
+            this.directionsService.route({
+                origin: { 'placeId': this.originPlaceId },
+                destination: { 'placeId': this.destinationPlaceId },
+                travelMode: "DRIVING"
+            }, function (response, status) {
+                if (status === 'OK') {
+                    me.directionsDisplay.setDirections(response);
+                    //console.log(response.routes[0].legs[0].distance.text);
+                    //console.log(response.routes[0].legs[0].duration.text);
+                    alert("Tu servicio tiene una distancia de " + response.routes[0].legs[0].distance.text + " y tomara un tiempo de " + response.routes[0].legs[0].duration.text )
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        };
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWGE0EV1uqz341g3V92jrGvZTVfhWJWLk&libraries=places,geometry" async defer></script>
+
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -13,9 +118,9 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
+    <title>Login form and Google maps places with info origin to destination</title>
+</head>
+<body onload="initMap()">
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -26,6 +131,10 @@
 
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
+
+        CREADO POR JORGE SUAREZ PARA PRUEBA FRONT END LIFTIT JORGSUAU@LIVE.COM.CO
     -->
-  </body>
+
+    
+</body>
 </html>
